@@ -1,4 +1,3 @@
-templates/loop.py
-templates/playlist
-README.md
-IMG/*.*
+.0/*.*
+.0/Images
+.0/playlist
