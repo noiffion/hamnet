@@ -44,7 +44,6 @@ class Users(Base):
     username = Column(String(60), nullable = False)
     email = Column(String(50), nullable = False)
     photo = Column(String(50))
-    password_hash = Column(String(64))
 
     @property
     def serialize(self):
