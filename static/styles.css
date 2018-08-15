@@ -834,6 +834,12 @@ footer {
   margin: 0 0 3% 0;
 }
 
+.theatre_categories select {
+  border: 1px solid #FFFFFF;
+  background-color: transparent;
+  color: #000000;
+}
+
 #new {
   font-weight: bold;
 }

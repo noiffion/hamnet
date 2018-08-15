@@ -23,7 +23,7 @@
       <input required id="theatre_name" name="theatre_name" type="text" value="" placeholder="Theatre name">
     </div>
     <div class="theatre_categories">
-      <label for="city_id"> City: </label>
+      <label for="city_id"> City: </label><br>
       <select id="city_id" name="city">
         {% for city in cities %}
           <option id="cityID={{ city.id }}" value="{{ city.id }}">{{ city.city_name }}</option> 
@@ -49,6 +49,7 @@
   </div> 
 </form>
 
+<!-- Manufacturing the theatre table of the database as html elements -->
 <div class="transform_help">
   {% for theatre in theatres %}
     <div class="wrapper">
@@ -67,9 +68,11 @@
   "use strict";
     
   function showSelected() {
+      // on clicking the 'Details' button show the particulars of the selected theatre 
       let selector = document.getElementById('theatre_select');
       let index = selector.selectedIndex;
 
+      // if an element is disabled by the removeTheatre function below re-enable it
       document.getElementById('theatre_name').removeAttribute("disabled");
       document.getElementById('city_id').style.display = "initial";
       document.getElementById('city_id').removeAttribute("disabled");
@@ -78,6 +81,7 @@
 
       document.getElementById('theatres_form').reset();
 
+      // using the HTML table from above to get the values
       let tindex = {{ tindex }}
       let theatres = []
       for (let i = 0; i < '{{ len_theatres }}'; i++) {
@@ -95,16 +99,16 @@
           theatres[i].push(listvalue);
           listvalue = document.getElementById(`webpage=${tindex[i]}`).getAttribute("value");
           theatres[i].push(listvalue);
-          //console.log(theatres[(i-1)]);
       }
-      console.log(theatres);
       
       if (index < 1) {
+          // if its a new theatre leave the form empty
           document.getElementById('theatre_id').setAttribute("value", "new");
           document.getElementById('theatre_name').setAttribute("value", "");
           document.getElementById('address').setAttribute("value", "");
           document.getElementById('webpage').setAttribute("value", "");
       } else {
+          // if an existing theatre is selected fill out the form with its details
           function selectItemByValue(elm, val) {
             length = elm.options.length;
             for (let i = 0; i < length; i++) {
@@ -123,7 +127,7 @@
   }
 
   function removeTheatre() {
-    
+    // remove a theatre by clicking on the Remove button and than submitting the form 
     if (document.getElementById('theatre_id').getAttribute("value") == "new") {
           alert("You haven't selected a theatre yet!");
     } else {

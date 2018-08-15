@@ -55,8 +55,8 @@ def getUserID(email):
 
 
 def loggedIn(user_id):
-    """Check if user is logged in, it displays a message in the
-       footer or the header accordingly"""
+    """ Check if user is logged in, it displays a message in the
+       footer or the header accordingly """
     if user_id:
         flash("You are logged in as: {0}".format(login_session['username']))
         return True
@@ -65,21 +65,59 @@ def loggedIn(user_id):
         return False
 
 
-def dateTr(request_form_date):
-    """ transform the requested date into python date object """
-    pDate = request_form_date
-    pDateYear = int(pDate[6:])
-    if pDate[3:5][0] == 0:
-        pDateMonth = int(pDate[3:5][1])
-    else:
-        pDateMonth = int(pDate[3:5])
+def dateTr(date, result):
+    """ Transform the date into a reversed format based on the 'result'
+        parameter (ie. 'DD-MM-YYYY' format to 'YYYY-MM-DD' and vice versa) """
 
-    if pDate[:2][0] == 0:
-        pDateDay = int(pDate[:2][1])
+    if result.lower() == 'y-m-d':
+        pDate = date
+        pDateYear = int(pDate[-4:])  # Year is the last four characters
+
+        for i, p in enumerate(pDate[:-5]):  # Month is after the first '-'
+            if p == '-':
+                pDateMonth = int(pDate[:-5][(i+1):])
+                break
+
+        for i, p in enumerate(pDate[:-5]):  # Day is before the first '-'
+            if p == '-':
+                pDateDay = int(pDate[:-5][:i])
+                break
+
+        pDate = datetime.date(pDateYear, pDateMonth, pDateDay)
+        return pDate
+
+    elif result.lower() == 'd-m-y':
+        pDate = date
+        pDateYear = pDate[:4]  # Year is the first four characters
+
+        for i, p in enumerate(pDate[5:]):
+            if p == '-':
+                pDateMonth = pDate[5:][:i]  # Month before the second '-'
+                break
+
+        for i, p in enumerate(pDate[5:]):
+            if p == '-':
+                pDateDay = pDate[5:][(i+1):]  # Day is after the 2nd '-'
+                break
+
+        pDate = "{0}-{1}-{2}".format(pDateDay, pDateMonth, pDateYear)
+        return pDate
+
     else:
-        pDateDay = int(pDate[:2])
-    pDate = datetime.date(pDateYear, pDateMonth, pDateDay)
-    return pDate
+        return False
+
+
+def changeMonth(performances):
+    """ Changing int month value (1-12) to string month value (Jan-Dec) """
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun',
+              'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    for perf in performances:
+        try:
+            for i, month in enumerate(months):
+                if int(perf[5][5:7]) == (i+1):
+                    perf[5] = str(perf[5][:4]) + month + str(perf[5][8:])
+        except ValueError:
+            continue
 
 
 @app.route('/')
@@ -158,7 +196,7 @@ def showPlayPerf(play_id):
     play = session.query(Plays).filter_by(id=play_id).one()
 
     # putting the result of a multiple JOIN SQL query into a list of lists
-    with open('./static/Queries/query_1.txt', 'r') as f:
+    with open('./DB/Queries/query_1.txt', 'r') as f:
         query = f.read()
     perfs = engine.execute(query.format(play_id))
     performances = []
@@ -166,17 +204,7 @@ def showPlayPerf(play_id):
         performances.append([perf.review_link, perf.review_title, perf.webpage,
                              perf.theatre_name, perf.city_name,
                              perf.performance_date, perf.username])
-
-    # Changing the int month value (1-12) to string month value (Jan-Dec)
-    months = ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun',
-              'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    for perf in performances:
-        try:
-            for i, month in enumerate(months):
-                if int(perf[5][5:7]) == (i+1):
-                    perf[5] = str(perf[5][:4]) + month + str(perf[5][8:])
-        except ValueError:
-            continue
+    changeMonth(performances)
 
     session.close()
     return render_template('pp_show.html', play=play, perfs=performances)
@@ -202,7 +230,7 @@ def modifyPlayPerf(play_id):
     play = session.query(Plays).filter_by(id=play_id).one()
 
     # putting the result of a multiple JOIN SQL query into a list of lists
-    with open('./static/Queries/query_2.txt', 'r') as f:
+    with open('./DB/Queries/query_2.txt', 'r') as f:
         query = f.read()
     perfs = engine.execute(query.format(play_id, login_session['user_id']))
     performances = []
@@ -211,17 +239,7 @@ def modifyPlayPerf(play_id):
                              perf.theatre_name, perf.city_name,
                              perf.performance_date, perf.username,
                              perf.review_id, perf.id])
-
-    # Changing the int month value (1-12) to string month value (Jan-Dec)
-    months = ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun',
-              'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    for perf in performances:
-        try:
-            for i, month in enumerate(months):
-                if int(perf[5][5:7]) == (i+1):
-                    perf[5] = str(perf[5][:4]) + month + str(perf[5][8:])
-        except ValueError:
-            continue
+    changeMonth(performances)
 
     if flask_req.method == 'POST':
         print("\nflask_req.form: {0}\n".format(flask_req.form))
@@ -258,13 +276,14 @@ def addPerf(play_id):
     theatres = (session.query(Theatres)
                 .order_by(asc(Theatres.theatre_name)).all())
 
-    # on submitting creating the new entries in the database
+    # on submitting the form create the new entries in the database
     if flask_req.method == 'POST':
         print(flask_req.form)
 
         # creating a new Review entry in the DB
+        p_date = flask_req.form['p_date']
         newReview = Reviews(review_title=flask_req.form['review_title'],
-                            performance_date=dateTr(flask_req.form['p_date']),
+                            performance_date=dateTr(p_date, 'y-m-d'),
                             review_link=flask_req.form['review_link'],
                             user_id=login_session['user_id'])
         session.add(newReview)
@@ -306,14 +325,17 @@ def editPerf(play_id, perf_id):
                 .order_by(asc(Theatres.theatre_name)).all())
     performance = session.query(Performances).filter_by(id=perf_id).one()
     review = session.query(Reviews).filter_by(id=performance.review_id).one()
+    # change the date format from 'YYYY-MM-DD' to 'DD-MM-YYYY'
+    p_date = str(review.performance_date)
+    p_date = dateTr(p_date, 'd-m-y')
 
-    # on submit update the information in the database
+    # on submitting the form update the information in the database
     if flask_req.method == 'POST':
         print(flask_req.form)
-
+        p_date = flask_req.form['p_date']
         performance.theatre_id = flask_req.form['theatre']
         review.review_title = flask_req.form['review_title']
-        review.performance_date = dateTr(flask_req.form['p_date'])
+        review.performance_date = dateTr(p_date, 'y-m-d')
         review.review_link = flask_req.form['review_link']
         session.commit()
         session.close()
@@ -321,7 +343,7 @@ def editPerf(play_id, perf_id):
 
     session.close()
     return render_template('form_editPerform.html', play=play, review=review,
-                           theatres=theatres,  perf=performance)
+                           theatres=theatres,  perf=performance, p_date=p_date)
 
 
 @app.route('/theatres/<int:play_id>/', methods=['GET', 'POST'])
@@ -338,7 +360,7 @@ def theatres(play_id):
         return redirect('/')
 
     # reading and executing an sql join of theatres and cities table
-    with open('./static/Queries/query_3.txt', 'r') as f:
+    with open('./DB/Queries/query_3.txt', 'r') as f:
         query = f.read()
     theatres = []
     tres = engine.execute(query.format(login_session['user_id']))

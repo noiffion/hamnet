@@ -2,7 +2,7 @@
 <html lang="en">
 
   <head>
-    <title> List of performances of the play </title>
+    <title> List of performances of {{ play.title }} </title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -17,7 +17,7 @@
     <header class="show_head">
 
       <div class="plays_of_WS">
-        <h5><a href="/"> The plays of William Shakespeare </a> — {{play.title}}</h5>
+        <h5><a href="/"> The plays of William Shakespeare </a> — {{ play.title }}</h5>
       </div>
 
       <div class="flash_login">

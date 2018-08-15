@@ -3,8 +3,7 @@
 
 <h1 id="form_title"> {{ play.title }} — edit performance </h1>
 
-<form action="#" method="post" class="performance_form" 
-      onsubmit="return confirm('Do you really want to modify this performance?');">
+<form action="#" method="post" class="performance_form" onsubmit="valSubmit();">
 
   <div class="form_questions">
   
@@ -12,7 +11,7 @@
       <h2> Theatre </h2>
       <div class="form_theatre">
         <div class="select_theatre">
-          <label for="theatre">Select one from the existing theatres: </label><br>
+          <label for="theatre_roll">Select one from the existing theatres: </label><br>
           <select id="theatre_roll" name="theatre">
             {% for theatre in theatres %}
               <option value="{{ theatre.id }}"> {{ theatre.theatre_name }} </option>
@@ -38,7 +37,7 @@
     <div class="form_category">
       <h2> Performance date </h2>
       <label for="p_date"> Date: </label>
-      <input required name="p_date" type="text" maxlength="10" value="{{ review.performance_date }}">
+      <input required id="p_date" name="p_date" type="text" maxlength="10" value="{{ p_date }}">
     </div>
   
   </div>
@@ -52,7 +51,39 @@
 
   "use strict";
 
+  function valSubmit() {
+ 
+    function valiDate() {
+      // checks if date is given in the correct form - if not: cancel submission (event.returnValue = false)
+      let message = "Please, type the date in the following format: DD-MM-YYYY (eg. 26-04-1564 for 26th of April, 1564)"
+      let pDate = document.getElementById('p_date').value;
+      if ((isNaN(pDate.substring(6))) || (pDate.substring(6) < 1000) || (pDate.substring(6) > 9999)) {
+        alert(message);
+        return event.returnValue = false;
+      } else if ((isNaN(pDate.substring(3,5))) || (pDate.substring(3,5) < 1)  || (pDate.substring(3,5) > 12)) {
+        alert(message);
+        return event.returnValue = false;
+      } else if ((isNaN(pDate.substring(0,2))) || (pDate.substring(0,2) < 1) || (pDate.substring(0,2) > 31)) {
+        alert(message);
+        return event.returnValue = false;
+      } else {
+        return true;
+      }
+    }
+    // if date was given in the correct form ask for confirmation
+    if (valiDate() == true) {
+      let yesNo = confirm('Do you really want to submit?');
+      if (yesNo == true) {
+        return event.returnValue = true;
+      } else {
+        return event.returnValue = false; 
+      }
+    } 
+
+  }
+
   function getTheatre() {
+    // selects the theatre from the drop down list that belongs to the performance
 
     function selectItemByValue(elm, val) {
       length = elm.options.length;
