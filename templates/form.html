@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <title> Form </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Tangerine" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Alex+Brush" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles.css')}}"> 
+  </head>
+
+  <body>
+
+    <header class="show_head">
+      <div class="plays_of_WS">
+        <h5>
+          <a href="/"> The plays of William Shakespeare </a> — 
+          <a href="{{url_for('modifyPlayPerf', play_id=play.id)}}"> {{play.title}} </a>
+        </h5>
+      </div>
+
+      <div class="flash_login">
+        {% if 'username' not in session %}
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              <p> {{ messages[0] }} </p>
+            {% endif %}
+          {% endwith %}
+          <a href="{{url_for('showLogin')}}">Login</a>
+        {% else %}
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              <p> {{ messages[0] }} </p>
+            {% endif %}
+          {% endwith %}
+          <a href="{{url_for('logout')}}">Logout</a>
+        {% endif %}
+      </div>
+    </header>
+
+    <div class="form_container">
+     {% block content %}
+     {% endblock %}
+    </div>
+
+  </body>
+
+</html>
+

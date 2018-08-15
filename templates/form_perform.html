@@ -1,0 +1,50 @@
+{% extends "form.html" %}
+{% block content %}
+
+<h1 id="form_title"> {{ play.title }} — add performance </h1>
+
+<form action="#" method="post" class="performance_form" onsubmit="return confirm('Do you really want to submit?');">
+
+  <div class="form_questions">
+  
+    <div class="form_category">
+      <h2> Theatre </h2>
+      <div class="form_theatre">
+        <div class="select_theatre">
+          <label for="theatre_roll">Select one from the existing theatres: </label><br>
+          <select id="theatre_roll" name="theatre">
+            {% for theatre in theatres %}
+              <option value="{{ theatre.id }}"> {{ theatre.theatre_name }} </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="new_theatre">
+          <p> Or if yours is not on the list add a new one here:</p>
+          <a href="{{ url_for('theatres', play_id=play.id) }}"> New / Edit / Remove Theatre </a>
+        </div>
+      </div>
+    </div>
+  
+    <div class="form_category">
+    <h2> Review </h2>
+      <label for="review_title">Review title: </label>
+      <input required id="review_title" name="review_title" type="text" maxlength="100"  placeholder="Review headline">
+      <br><br>
+      <label for="review_link">Review link: </label>
+      <input name="review_link" id="review_link" type="text" maxlength="500" placeholder="http://...">
+    </div>
+           
+    <div class="form_category">
+      <h2> Performance date </h2>
+      <label for="p_date"> Date: </label>
+      <input required id="p_date" name="p_date" type="text" maxlength="10" placeholder="Day-Month-Year">
+    </div>
+  
+  </div>
+  <div class="submit_button">
+    <input id="perf_submit" type="submit" value="Submit">
+  </div> 
+
+</form>
+
+{% endblock %}

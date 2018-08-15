@@ -1,0 +1,149 @@
+{% extends "form.html" %}
+{% block content %}
+
+<h1 id="theatre_title"> Theatres — edit </h1>
+<div class="theatres_select">
+  <p> Please select one option from below: </p>
+  <select id="theatre_select">
+     <option id="new" value="0"> NEW </option> 
+    {% for theatre in theatres %}
+     <option value="{{ theatre[0] }}" id="{{ theatre[0] }}"> {{ theatre[1] }} </option>
+    {% endfor %}
+  </select>
+  <button type="button" id="add_edit_selected">
+    <span class="glyphicon glyphicon-edit"></span>  Details 
+  </button>
+</div>
+
+<form action="#" method="POST" id="theatres_form" onsubmit="return confirm('Do you really want to submit?');">
+  <div class="form_questions">
+      <input type="hidden" id="theatre_id" name="theatre_id" value="new">
+    <div class="theatre_categories">
+      <label for="theatre_name"> Theatre name: </label>
+      <input required id="theatre_name" name="theatre_name" type="text" value="" placeholder="Theatre name">
+    </div>
+    <div class="theatre_categories">
+      <label for="city_id"> City: </label>
+      <select id="city_id" name="city">
+        {% for city in cities %}
+          <option id="cityID={{ city.id }}" value="{{ city.id }}">{{ city.city_name }}</option> 
+        {% endfor %}
+      </select>
+    </div>
+    <div class="theatre_categories">
+      <label for="address"> Address: </label>
+      <input id="address" name="address" type="text" value="" placeholder="Address">
+    </div>
+    <div class="theatre_categories">
+      <label for="webpage"> Webpage: </label>
+      <input id="webpage" name="webpage" type="text" value="" placeholder="Webpage">
+    </div>
+    <div class="theatre_delete">
+      <button type="button" id="remove_theatre">
+        <span class="glyphicon glyphicon-remove"></span>  Remove this theatre
+      </button>
+    </div>
+  </div>
+  <div class="submit_button">
+    <input id="perf_submit" type="submit" value="Submit"> 
+  </div> 
+</form>
+
+<div class="transform_help">
+  {% for theatre in theatres %}
+    <div class="wrapper">
+      <span id="id={{ theatre[0] }}" value="{{ theatre[0] }}"></span>
+      <span id="name={{ theatre[0] }}" value="{{ theatre[1] }}"></span>
+      <span id="city_id={{ theatre[0] }}" value="{{ theatre[2] }}"></span>
+      <span id="city_name={{ theatre[0] }}" value="{{ theatre[3] }}"></span>
+      <span id="address={{ theatre[0] }}" value="{{ theatre[4] }}"></span>
+      <span id="webpage={{ theatre[0] }}" value="{{ theatre[5] }}"></span>
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+
+  "use strict";
+    
+  function showSelected() {
+      let selector = document.getElementById('theatre_select');
+      let index = selector.selectedIndex;
+
+      document.getElementById('theatre_name').removeAttribute("disabled");
+      document.getElementById('city_id').style.display = "initial";
+      document.getElementById('city_id').removeAttribute("disabled");
+      document.getElementById('address').removeAttribute("disabled");
+      document.getElementById('webpage').removeAttribute("disabled");
+
+      document.getElementById('theatres_form').reset();
+
+      let tindex = {{ tindex }}
+      let theatres = []
+      for (let i = 0; i < '{{ len_theatres }}'; i++) {
+          let listvalue;
+          theatres.push([]);
+          listvalue = document.getElementById(`id=${tindex[i]}`).getAttribute("value");
+          theatres[i].push(listvalue);
+          listvalue = document.getElementById(`name=${tindex[i]}`).getAttribute("value");
+          theatres[i].push(listvalue);
+          listvalue = document.getElementById(`city_id=${tindex[i]}`).getAttribute("value");
+          theatres[i].push(listvalue);
+          listvalue = document.getElementById(`city_name=${tindex[i]}`).getAttribute("value");
+          theatres[i].push(listvalue);
+          listvalue = document.getElementById(`address=${tindex[i]}`).getAttribute("value");
+          theatres[i].push(listvalue);
+          listvalue = document.getElementById(`webpage=${tindex[i]}`).getAttribute("value");
+          theatres[i].push(listvalue);
+          //console.log(theatres[(i-1)]);
+      }
+      console.log(theatres);
+      
+      if (index < 1) {
+          document.getElementById('theatre_id').setAttribute("value", "new");
+          document.getElementById('theatre_name').setAttribute("value", "");
+          document.getElementById('address').setAttribute("value", "");
+          document.getElementById('webpage').setAttribute("value", "");
+      } else {
+          function selectItemByValue(elm, val) {
+            length = elm.options.length;
+            for (let i = 0; i < length; i++) {
+              if (elm.options[i].value == val) {
+                  elm.selectedIndex = i;
+                  break;
+              }
+            } 
+          }
+          document.getElementById('theatre_id').setAttribute("value", theatres[index-1][0]);
+          document.getElementById('theatre_name').setAttribute("value", theatres[index-1][1]);
+          selectItemByValue(document.getElementById('city_id'), theatres[index-1][2]);
+          document.getElementById('address').setAttribute("value", theatres[index-1][4]);
+          document.getElementById('webpage').setAttribute("value", theatres[index-1][5]);
+      }   
+  }
+
+  function removeTheatre() {
+    
+    if (document.getElementById('theatre_id').getAttribute("value") == "new") {
+          alert("You haven't selected a theatre yet!");
+    } else {
+          document.getElementById('theatres_form').reset();
+          document.getElementById('theatre_name').setAttribute("value", "-");
+          document.getElementById('theatre_name').setAttribute("disabled", "");
+          document.getElementById('city_id').style.display = "none";
+          document.getElementById('city_id').setAttribute("disabled", "");
+          document.getElementById('address').setAttribute("value", "-");
+          document.getElementById('address').setAttribute("disabled", "");
+          document.getElementById('webpage').setAttribute("value", "-");
+          document.getElementById('webpage').setAttribute("disabled", "");
+    }
+    
+  }
+
+  document.getElementById('add_edit_selected').addEventListener('click', showSelected);
+  document.getElementById('remove_theatre').addEventListener('click', removeTheatre);
+
+</script>
+
+{% endblock %}
+

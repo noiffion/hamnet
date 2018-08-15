@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <title> The plays </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Tangerine" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Alex+Brush" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='tabs.js') }}" ></script>
+  </head>
+
+  <body>
+
+    <header class="main_header">
+      <div class="bard">
+        <h1> The plays of William Shakespeare </h1> 
+      </div>
+    </header>
+
+    <main class="content">
+
+      <div class="categories_head">
+      </div> 
+      
+      <div class="categories_body">
+      
+        <div class="categories_body_upper">
+      
+          <h2> "He was not of an age, but for all time" <br> - Ben Jonson</h2>
+          <a href="https://en.wikipedia.org/wiki/Shakespeare%27s_plays" target="_blank">
+            <img src="./../static/IMG/Paintings/All_plays_2.jpg" 
+                 alt="All of the significant Shakespeare characters in one painting">
+          </a>
+      
+          <!-- Tab links -->
+          <div class="tab">
+            <button class="tablinks" onclick="openDrama(event, 'Tragedies')">Tragedies</button>
+            <button class="tablinks" onclick="openDrama(event, 'Comedies')">Comedies</button>
+            <button class="tablinks" onclick="openDrama(event, 'Histories')">Histories</button>
+            <button class="tablinks" onclick="openDrama(event, 'Romances')">Romances</button>
+          </div>
+      
+        </div>
+      
+        <div class="categories_body_lower">
+          <!-- Tab content -->
+          <article id="Tragedies" class="tabcontent">
+            <h3>Tragedies: </h3>
+            <div class="quotebox">
+              <p class="leftquote"> "Shakespeare: the nearest thing in incarnation to the eye of God" 
+                                    <br> - Laurence Olivier</p>
+              <p class="rightquote"> "An insignificant, inartistic writer" 
+                                    <br> - Leo Tolstoy</p>
+            </div>  
+            <ul class="row">
+            {% for play in playlist[0] %}
+                <li><a href="{{ url_for('showPlayPerf', play_id=play.id) }}">— {{ play.title }}</a></li>
+            {% endfor %}
+            </ul>
+          </article>
+          <article id="Comedies" class="tabcontent">
+            <h3>Comedies: </h3>
+            <div class="quotebox">
+              <p class="leftquote"> "To be able to devote one's life to art without forgetting that art
+                                    is frivolous is a tremendous achievment of personal character. 
+                                    Shakespeare never takes himself too seriously" 
+                                    <br> - W.H. Auden </p>
+              <p class="rightquote"> "There is no eminent writer, not even Sir Walter Scott, whom I 
+                                      despise so entirely as I despise Shakespear when I measure my
+                                      mind against his" 
+                                      <br> - G.B. Shaw </p>
+            </div>
+            <ul class="row">
+            {% for play in playlist[1] %}
+              <li><a href="{{ url_for('showPlayPerf', play_id=play.id) }}">— {{ play.title }}</a></li>
+            {% endfor %}
+            </ul>
+          </article>
+          <article id="Histories" class="tabcontent">
+            <h3>Histories: </h3>
+            <div class="quotebox">
+              <p class="leftquote"> "He breathed upon dead bodies and brought them into life" 
+                                    <br> - R.W. Emerson</p>
+              <p class="rightquote"> "Disliked him cordially" 
+                                    <br> - J.R.R. Tolkien</p>
+            </div>
+            <ul class="row">
+            {% for play in playlist[2] %}
+              <li><a href="{{ url_for('showPlayPerf', play_id=play.id) }}">— {{ play.title }}</a></li>
+            {% endfor %}
+            </ul>
+          </article>
+          <article id="Romances" class="tabcontent">
+            <h3>Romances: </h3>
+            <div class="quotebox">
+              <p class="leftquote"> "He was the man who of all modern, and perhaps ancient poets, had the
+                                    largest and most comprehensive soul" 
+                                    <br> - John Dryden</p>
+              <p class="rightquote"> "He was a savage… with some imagination. France has not insults, 
+                                      fool’s-caps, and pillories enough for such a scoundrel" 
+                                      <br> - Voltaire </p>
+            </div>
+            <ul class="row">
+            {% for play in playlist[3] %}
+              <li><a href="{{ url_for('showPlayPerf', play_id=play.id) }}">— {{ play.title }}</a></li>
+            {% endfor %}
+            </ul>
+          </article>
+      
+          <div class="endline">
+          </div>
+      
+        </div>
+      
+      </div>
+
+    </main>
+
+     <div class="categories_foot">
+     </div>
+
+    <footer>
+      {% if 'username' not in session %}
+          <div class="flash">
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <p> {{ messages[0] }} </p>
+              {% endif %}
+            {% endwith %}
+          </div>
+          <div class="login_link">
+            <a href="{{ url_for('showLogin') }}">Login</a>
+          </div>
+      {% else %}
+          <div class="flash">
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <p> {{ messages[0] }} </p>
+              {% endif %}
+            {% endwith %}
+          </div>
+          <div class="login_link">
+            <a href="{{ url_for('logout') }}">Logout</a>
+          </div>
+      {% endif %}
+    </footer>
+
+
+  </body>
+
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <title> Modification of the performances </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Tangerine" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Alex+Brush" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}"> 
+  </head>
+
+  <body>
+
+    <header class="show_head">
+
+      <div class="plays_of_WS">
+        <h5><a href="/"> The plays of William Shakespeare </a> — {{play.title}}</h5>
+      </div>
+
+      <div class="flash_login">
+        {% if 'username' not in session %}
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              <p> {{ messages[0] }} </p>
+            {% endif %}
+          {% endwith %}
+          <a href="{{url_for('showLogin')}}">Login</a>
+        {% else %}
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              <p> {{ messages[0] }} </p>
+            {% endif %}
+          {% endwith %}
+          <a href="{{url_for('logout')}}">Logout</a>
+        {% endif %}
+      </div>
+
+    </header>
+
+    <main class="show_main">
+
+
+      <div class="show_playname">
+        <h1> {{play.title}} </h1>
+      </div>
+      <div class="play_quote">
+        <h2> "{{play.quote}}" </h2>
+      </div>
+      <div class="play_images">
+        <img alt="image for the play: {{play.title}}" src="./../../../static/IMG/Paintings/{{play.picpath}}">
+      </div>
+
+
+      <div class="performances">
+
+        <div class="perf_head">
+          <h3> Performances of the play: </h3>
+          <div class="head_button_modify">
+           <a href="{{ url_for('addPerf', play_id=play.id) }}">
+             <button><span class="glyphicon glyphicon-plus"></span>Add</button>
+           </a>
+          </div>
+        </div>
+
+        <div class="perf_list">
+          {% for perf in perfs %}
+             <ul>
+              <li>
+                <a href="{{ perf[0] }}" target="blank">
+                  <span id="review_title">{{ perf[1] }} </span>
+                </a>
+              </li>
+              <li><a href="{{ perf[2] }}" target="blank">{{ perf[3] }}</a></li>
+              <li>{{ perf[4] }}</li>
+              <li>{{ perf[5][7:] }} - <span class="little_month">{{ perf[5][4:7] }}</span> - {{ perf[5][:4] }}</li> 
+              <li id="creator_right"> This entry was created by: {{ perf[6] }}</li>
+            </ul>
+            <div class="perf_list_buttons_modify">
+              <div class="perf_buttons_edit">
+                <a href="{{ url_for('editPerf', play_id=play.id, perf_id=perf[8]) }}">
+                  <button id="perf_edit_button">
+                    <span class="glyphicon glyphicon-edit"></span> Edit
+                  </button> 
+                </a>
+              </div>
+              <form action="{{ url_for('modifyPlayPerf', play_id=play.id) }}" 
+                    method='POST' 
+                    onsubmit="return confirm('Are you sure you want to delete this entry?');">
+                <input type="hidden" id="perf_reviewID" name="perf_reviewID" value="{{ perf[7] }}">
+                <input type="hidden" id="perfID" name="perfID" value="{{ perf[8] }}">
+                <button id="perf_delete_button" type="submit" value="Submit">
+                  <span class="glyphicon glyphicon-remove"></span> Delete
+                </button>
+              </form>
+            </div>
+          {% endfor %}
+        </div>
+
+      </div>
+
+      <div class="perf_foot">
+      </div>
+
+    </main>
+
+  </body>
+
+</html>
