@@ -1,3 +1,5 @@
+/* from w3schools.com */
+
 /* Tabs of genres (Tragedies, Comedies, Histories, Romances) in */
 function openDrama(evt, categName) {
     // Declare all variables
