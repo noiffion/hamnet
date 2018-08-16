@@ -73,5 +73,15 @@ info.
 300px width to 1,500px.
 
 
+#### JSON API endpoints
+
+There are three JSON endpoints for the plays, theatres and performances tables in the database at:
+- localhost:8000/plays/JSON/
+- localhost:8000/theatres/JSON/
+- localhost:8000/play/<play_id>/performance/JSON/
+addresses, where <play_id> is the id of the performance (intially, plays with these ids: 20, 24, 
+26, 29, 32 have performances in the db).
+
+
 #### License
 MIT License (see attached LICENSE file)
