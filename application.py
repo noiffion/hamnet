@@ -1,11 +1,11 @@
-# !/usr/bin/env python3
+#! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import os
+import auth
 import json
 import random
 import string
-import authoriz
 import datetime
 import sqlalchemy
 import sqlalchemy.orm
@@ -140,7 +140,7 @@ def home():
 def showLogin():
     """Displays the login page"""
 
-    # print(login_session)
+    print(login_session)
 
     if login_session.get('provider') and login_session.get('user_id'):
         return redirect(login_session['current_uri'])
@@ -149,7 +149,6 @@ def showLogin():
                     for x in range(33))
     login_session['state'] = state
     uri = login_session['current_uri']
-    print(uri)
     return render_template('login.html', STATE=state, URI=uri)
 
 
@@ -162,14 +161,14 @@ def login(provider):
         html_output = f.read()
 
     if provider == 'google':
-        if authoriz.ggLogin():
+        if auth.ggLogin():
             return html_output.format(login_session['username'],
                                       login_session['picture'])
         else:
             return redirect('/')
 
     elif provider == 'facebook':
-        if authoriz.fbLogin():
+        if auth.fbLogin():
             return html_output.format(login_session['username'],
                                       login_session['picture'])
         else:
@@ -238,11 +237,16 @@ def modifyPlayPerf(play_id):
         performances.append([perf.review_link, perf.review_title, perf.webpage,
                              perf.theatre_name, perf.city_name,
                              perf.performance_date, perf.username,
-                             perf.review_id, perf.id])
+                             perf.review_id, perf.id, perf.user_id])
     changeMonth(performances)
 
     if flask_req.method == 'POST':
         print("\nflask_req.form: {0}\n".format(flask_req.form))
+
+        # evading unauthorized deleting
+        if flask_req.form['user_id'] != login_session['user_id']:
+            return redirect(url_for('home'))
+
         del_performance = (session.query(Performances)
                            .filter_by(id=flask_req.form['perfID']).one())
         del_review = (session.query(Reviews)
@@ -278,7 +282,6 @@ def addPerf(play_id):
 
     # on submitting the form create the new entries in the database
     if flask_req.method == 'POST':
-        print(flask_req.form)
 
         # creating a new Review entry in the DB
         p_date = flask_req.form['p_date']
@@ -316,9 +319,6 @@ def editPerf(play_id, perf_id):
         session.close()
         return redirect(url_for('showPlayPerf', play_id=play_id))
 
-    login_session['current_uri'] = (url_for('editPerf',
-                                    play_id=play_id, perf_id=perf_id))
-
     # creating the necessary data objects from the database
     play = session.query(Plays).filter_by(id=play_id).one()
     theatres = (session.query(Theatres)
@@ -329,9 +329,15 @@ def editPerf(play_id, perf_id):
     p_date = str(review.performance_date)
     p_date = dateTr(p_date, 'd-m-y')
 
+    # evading unauthorized editing
+    if performance.user_id != login_session['user_id']:
+        return redirect(url_for('home'))
+
+    login_session['current_uri'] = (url_for('editPerf',
+                                    play_id=play_id, perf_id=perf_id))
+
     # on submitting the form update the information in the database
     if flask_req.method == 'POST':
-        print(flask_req.form)
         p_date = flask_req.form['p_date']
         performance.theatre_id = flask_req.form['theatre']
         review.review_title = flask_req.form['review_title']
@@ -379,8 +385,6 @@ def theatres(play_id):
 
     # reading and executing the form data
     if flask_req.method == 'POST':
-        print(flask_req.form)
-        print(flask_req.form['theatre_id'])
         if flask_req.form['theatre_id'] == 1:  # cannot remove Globe theatre
             session.close()
             return redirect(url_for('theatres', play_id=play_id))
@@ -434,11 +438,11 @@ def logout():
     if login_session.get('provider'):
 
         if login_session['provider'] == 'google':
-            authoriz.ggLogout()  # authoriz module ggLogout func
+            auth.ggLogout()  # auth module ggLogout func
             del login_session['gplus_id']
 
         elif login_session['provider'] == 'facebook':
-            authoriz.fbLogout()  # authoriz module fbLogout func
+            auth.fbLogout()  # auth module fbLogout func
             del login_session['facebook_id']
 
         del login_session['access_token']

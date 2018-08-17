@@ -34,7 +34,7 @@ browse the pages:
 with pip3:
  - Flask (1.0.2)
  - google-auth (1.5.0) and google-auth-oauthlib (0.2.0)
- - SQLAlchemy (1.2.9)
+ - SQLAlchemy (1.2.10)
  - urllib (1.23)
 
  
@@ -54,9 +54,8 @@ Midsummer Night's Dream, III Richard, The Tempest. Macbeth has three from two di
 
 If the user is not logged in the details of the performnaces are shown (without being able to edit 
 the entries). If the user is logged in just the entries created by the user are shown and become
-editable: a new one can be added, or existing ones can be deleted or edited. 
-This process makes it sure that a user cannot delete or edit an entry that was not created by 
-him/her. 
+editable: a new one can be added, or existing ones can be deleted or edited. The server side code 
+makes it sure that an user cannot edit a performance it is not created by him/her.
 
 On the performances edit pages there is a link which takes the user to a page where the theatres
 can be edited or deleted or new ones added. Every modification attempt requires authorization: 
