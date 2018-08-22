@@ -16,6 +16,12 @@ from flask import (Flask, request as flask_req, redirect,
                    session as login_session, make_response)
 
 
+engine = create_engine('sqlite:///hamnet.db')
+Base.metadata.bind = engine
+session = scoped_session(sessionmaker(
+          autocommit=False, autoflush=True, bind=engine))
+
+
 def createUser(login_session):
     """Creates a user in the database"""
     newUser = Users(username=login_session['username'],
