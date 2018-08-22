@@ -27,33 +27,6 @@ session = scoped_session(sessionmaker(
           autocommit=False, autoflush=True, bind=engine))
 
 
-def createUser(login_session):
-    """Creates a user in the database"""
-    newUser = Users(username=login_session['username'],
-                    email=login_session['email'],
-                    photo=login_session['picture'])
-    session.add(newUser)
-    session.commit()
-    user = session.query(Users).filter_by(email=login_session['email']).one()
-    session.close()
-    return user.id
-
-
-def getUserInfo(user_id):
-    user = session.query(Users).filter_by(id=user_id).one()
-    session.close()
-    return user
-
-
-def getUserID(email):
-    try:
-        user = session.query(Users).filter_by(email=email).one()
-        session.close()
-        return user.id
-    except sqlalchemy.orm.exc.NoResultFound:
-        return None
-
-
 def loggedIn(user_id):
     """ Check if user is logged in, it displays a message in the
        footer or the header accordingly """

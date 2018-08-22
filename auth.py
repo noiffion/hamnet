@@ -4,12 +4,43 @@
 import json
 import urllib
 import urllib.request as url_req
-import models
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
-from application import getUserID, createUser
-from flask import (request as flask_req, redirect,
+import sqlalchemy
+import sqlalchemy.orm
+from sqlalchemy import create_engine, asc
+from sqlalchemy.orm import sessionmaker, scoped_session
+from models import (Base, Genres, Plays, Users, Reviews,
+                    Cities, Theatres, Performances)
+from flask import (Flask, request as flask_req, redirect,
                    session as login_session, make_response)
+
+
+def createUser(login_session):
+    """Creates a user in the database"""
+    newUser = Users(username=login_session['username'],
+                    email=login_session['email'],
+                    photo=login_session['picture'])
+    session.add(newUser)
+    session.commit()
+    user = session.query(Users).filter_by(email=login_session['email']).one()
+    session.close()
+    return user.id
+
+
+def getUserInfo(user_id):
+    user = session.query(Users).filter_by(id=user_id).one()
+    session.close()
+    return user
+
+
+def getUserID(email):
+    try:
+        user = session.query(Users).filter_by(email=email).one()
+        session.close()
+        return user.id
+    except sqlalchemy.orm.exc.NoResultFound:
+        return None
 
 
 def ggLogin():
