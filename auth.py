@@ -60,7 +60,7 @@ def ggLogin():
 
         # upgrade the authorization code into a credentials object
         oauth_flow = (google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-                      'static/gg_client_secrets.json',
+                      'static/sc/gg_client_secrets.json',
                       scopes=['https://www.googleapis.com/auth/userinfo.email',
                               'https://www.googleapis.com/auth/plus.me'],
                       state=login_session['state']))
@@ -80,7 +80,7 @@ def ggLogin():
             return False
 
         # verify that the access token is valid for this app
-        with open('static/gg_client_secrets.json', 'r') as gg:
+        with open('static/sc/gg_client_secrets.json', 'r') as gg:
             app = gg.read()
             app_id = json.loads(app)['web']['client_id']
             app_secret = json.loads(app)['web']['client_secret']
@@ -132,7 +132,7 @@ def fbLogin():
             return False
 
         access_token = flask_req.data.decode()
-        with open('static/fb_client_secrets.json', 'r') as fb:
+        with open('static/sc/fb_client_secrets.json', 'r') as fb:
             app = fb.read()
             app_id = json.loads(app)['web']['app_id']
             app_secret = json.loads(app)['web']['app_secret']
