@@ -2,6 +2,4 @@
 .0/Images
 .0/playlist
 .0/DB_fill
-static/fb_client_secrets.json
-static/gg_client_secrets.json
-
+static/sc/*
