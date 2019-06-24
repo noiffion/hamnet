@@ -23,7 +23,7 @@ session = scoped_session(sessionmaker(
 
 
 def createUser(login_session):
-    """Creates a user in the database"""
+    """ Creates a user in the database """
     newUser = Users(username=login_session['username'],
                     email=login_session['email'],
                     photo=login_session['picture'])
