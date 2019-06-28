@@ -33,8 +33,11 @@ browse the pages:
 
 with pip3:
  - Flask (1.0.2)
- - google-auth (1.5.0) and google-auth-oauthlib (0.2.0)
  - SQLAlchemy (1.2.10)
+ - google-api-python-client 1.7.9      
+ - google-auth (1.5.0) 
+ - google-auth-oauthlib (0.2.0)
+ - google-auth-httplib2     0.0.3      
 
  
 #### Running and using the webpage
@@ -83,3 +86,7 @@ addresses, where <play_id> is the id of the performance (intially, plays with th
 
 #### License
 MIT License (see attached LICENSE file)
+
+
+#### Demo
+https://shake-speare.glitch.me/

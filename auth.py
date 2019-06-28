@@ -52,7 +52,7 @@ def getUserID(email):
 def ggLogin():
     """ Login with a google account """
 
-    # evade Cross-Site Request Forgery
+    # evade Cross-site request forgery
     try:
         if flask_req.args.get('state') != login_session['state']:
             print("Invalid 'state' parameter!")
