@@ -1,7 +1,7 @@
 /* from w3schools.com */
 
 /* Tabs of genres (Tragedies, Comedies, Histories, Romances) in */
-function openDrama(evt, categName) {
+function openDrama(event, categName) {
     // Declare all variables
     var i, tabcontent, tablinks;
 
@@ -19,5 +19,5 @@ function openDrama(evt, categName) {
 
     // Show the current tab, and add an "active" class to the button that opened the tab
     document.getElementById(categName).style.display = "block";
-    evt.currentTarget.className += " active";
+    event.currentTarget.className += " active";
 }

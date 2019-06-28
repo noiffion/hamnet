@@ -35,14 +35,13 @@ with pip3:
  - Flask (1.0.2)
  - google-auth (1.5.0) and google-auth-oauthlib (0.2.0)
  - SQLAlchemy (1.2.10)
- - urllib (1.23)
 
  
 #### Running and using the webpage
 
   To run the server application one needs to run the application.py file with Python 3.
 ```
-$ python3 application.py
+$ python3 main.py
 ```
 
   Then after typing the 'localhost:8000' in the address bar of the browser the webpage will be up 
