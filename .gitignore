@@ -3,3 +3,4 @@
 .0/playlist
 .0/DB_fill
 static/sc/*
+__pycache__/*

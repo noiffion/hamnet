@@ -89,4 +89,4 @@ MIT License (see attached LICENSE file)
 
 
 #### Demo
-https://shake-speare.glitch.me/
+https://noiffion.pythonanywhere.com

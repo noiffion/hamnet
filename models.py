@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Date, ForeignKey
 
+
 """ Module to create the database tables as classes """
 
 Base = declarative_base()
@@ -18,8 +19,10 @@ class Genres(Base):
 
     @property
     def serialize(self):
-        return {'id': self.id,
-                'genre': self.genre}
+        return {
+          'id': self.id,
+          'genre': self.genre
+        }
 
 
 class Plays(Base):
@@ -34,12 +37,14 @@ class Plays(Base):
 
     @property
     def serialize(self):
-        return {'id': self.id,
-                'title': self.title,
-                'genre': self.genres.genre,
-                'genre_id': self.genre_id,
-                'written_in': self.written_in,
-                'quote': self.quote}
+        return {
+          'id': self.id,
+          'title': self.title,
+          'genre': self.genres.genre,
+          'genre_id': self.genre_id,
+          'written_in': self.written_in,
+          'quote': self.quote
+        }
 
 
 class Users(Base):
@@ -51,10 +56,12 @@ class Users(Base):
 
     @property
     def serialize(self):
-        return {'id': self.id,
-                'username': self.username,
-                'email': self.email,
-                'photo': self.photo}
+        return {
+          'id': self.id,
+          'username': self.username,
+          'email': self.email,
+          'photo': self.photo
+        }
 
 
 class Reviews(Base):
@@ -68,11 +75,13 @@ class Reviews(Base):
 
     @property
     def serialize(self):
-        return {'id': self.id,
-                'review_title': self.review_title,
-                'performance_date': self.performance_date,
-                'review_link': self.review_link,
-                'user_id': self.user_id}
+        return {
+          'id': self.id,
+          'review_title': self.review_title,
+          'performance_date': self.performance_date,
+          'review_link': self.review_link,
+          'user_id': self.user_id
+        }
 
 
 class Cities(Base):
@@ -82,8 +91,10 @@ class Cities(Base):
 
     @property
     def serialize(self):
-        return {'id': self.id,
-                'city_name': self.city_name}
+        return {
+          'id': self.id,
+          'city_name': self.city_name
+        }
 
 
 class Theatres(Base):
@@ -99,12 +110,14 @@ class Theatres(Base):
 
     @property
     def serialize(self):
-        return {'id': self.id,
-                'theatre_name': self.theatre_name,
-                'city': self.city.city_name,
-                'city_id': self.city_id,
-                'address': self.address,
-                'webpage': self.webpage}
+        return {
+          'id': self.id,
+          'theatre_name': self.theatre_name,
+          'city': self.city.city_name,
+          'city_id': self.city_id,
+          'address': self.address,
+          'webpage': self.webpage
+        }
 
 
 class Performances(Base):
@@ -121,15 +134,17 @@ class Performances(Base):
 
     @property
     def serialize(self):
-        return {'id': self.id,
-                'play_id': self.play_id,
-                'play_title': self.plays.title,
-                'theatre_id': self.theatre_id,
-                'theatre': self.theatres.theatre_name,
-                'review_id': self.review_id,
-                'review': self.reviews.review_title,
-                'user_id': self.user_id,
-                'entry_made_by': self.users.username}
+        return {
+          'id': self.id,
+          'play_id': self.play_id,
+          'play_title': self.plays.title,
+          'theatre_id': self.theatre_id,
+          'theatre': self.theatres.theatre_name,
+          'review_id': self.review_id,
+          'review': self.reviews.review_title,
+          'user_id': self.user_id,
+          'entry_made_by': self.users.username
+        }
 
 
 engine = create_engine('sqlite:///hamnet.db')
