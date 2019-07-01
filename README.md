@@ -64,10 +64,9 @@ without logging in a user cannot edit the entries meaning they cannot be modifie
 than the maker of the entry. Every update or addition will only take place after correctly filling
 out the forms, and clicking on the submit button at the bottom of the form.
 
-The login requires a valid Facebook account (with these two I believe nearly 100% of the
-users are covered). The status of the user (logged in or out is displayed in the footer on the 
-main page and in the header on the 'inner' pages - the login links are right next to the status
-info.
+The login requires a valid Facebook account The status of the user (logged in or out is displayed in 
+the footer on the main page and in the header on the 'inner' pages - the login links are right next 
+to the status info.
 
   The pages are intended to be responsive and tested on devices with screen sizes ranging from 
 300px width to 1,500px.
