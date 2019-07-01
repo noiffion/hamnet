@@ -1,0 +1,13 @@
+SELECT reviews.review_title as review_title, reviews.review_link as review_link,
+       reviews.performance_date as performance_date, theatres.webpage as webpage, 
+       theatres.theatre_name as theatre_name, cities.city_name as city_name, 
+       performances.user_id as user_id, user.name as username, 
+       performances.review_id as review_id, performances.id as id
+FROM performances JOIN reviews 
+ON performances.review_id = reviews.id
+JOIN (theatres JOIN cities ON theatres.city_id = cities.id) 
+ON performances.theatre_id = theatres.id
+JOIN user
+ON performances.user_id = user.id
+WHERE performances.play_id = {0} AND performances.user_id = {1}
+ORDER BY reviews.performance_date DESC;

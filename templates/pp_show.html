@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <title> List of performances of {{ play.title }} </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="/static/favicon.ico" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Tangerine" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Alex+Brush" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}"> 
+  </head>
+
+  <body>
+
+    <header class="show_head">
+
+      <div class="plays_of_WS">
+        <h5><a href="/"> The plays of William Shakespeare </a> — {{ play.title }}</h5>
+      </div>
+
+      <div class="flash_login">
+        {% if current_user.is_authenticated %}
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              <p> {{ messages[0] }} </p>
+            {% endif %}
+          {% endwith %}
+          <a href="{{url_for('logout')}}">Logout</a>
+        {% else %}
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              <p> {{ messages[0] }} </p>
+            {% endif %}
+          {% endwith %}
+          <a href="{{url_for('facebook.login')}}">Login</a>
+        {% endif %}
+      </div>
+        
+    </header>
+
+    <main class="show_main">
+
+      <div class="show_playname">
+        <h1> {{play.title}} </h1>
+      </div>
+      <div class="play_quote">
+        <h2> "{{play.quote}}" </h2>
+      </div>
+      <div class="play_images">
+        <img alt="image for the play: {{play.title}}" src="./../../static/IMG/Paintings/{{play.picpath}}">
+      </div>
+
+
+      <div class="performances">
+
+        <div class="perf_head">
+          <h3> Performances of the play: </h3>
+          <div class="head_button_show">
+            <button title="Log in to create a new entry" disabled>
+              <span class="glyphicon glyphicon-plus"></span> Add
+            </button>
+          </div>
+        </div>
+
+        <div class="perf_list">
+          {% for perf in perfs %}
+            <ul>
+              <li>
+                <a href="{{ perf[0] }}" target="blank">
+                  <span id="review_title">{{ perf[1] }}</span> 
+                </a>
+              </li>
+              <li><a href="{{ perf[2] }}" target="blank">{{ perf[3] }}</a></li>
+              <li>{{ perf[4] }}</li>
+              <li>{{ perf[5][7:] }} - <span class="little_month">{{ perf[5][4:7] }}</span> - {{ perf[5][:4] }}</li> 
+              <li id="creator_right"> This entry was created by: {{ perf[6] }}</li>
+            </ul>
+            <div class="perf_list_buttons_show">
+              <button title="If you are the creator of this entry you can edit it after logging in." disabled>
+                <span class="glyphicon glyphicon-edit"></span> Edit
+              </button> 
+              <button title="If you are the creator of this entry you can delete it after logging in." disabled>
+                <span class="glyphicon glyphicon-remove"></span> Delete
+              </button>
+            </div>
+          {% endfor %}
+        </div>
+
+      </div>
+
+      <div class="perf_foot">
+      </div>
+
+    </main>
+
+  </body>
+
+</html>
