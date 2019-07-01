@@ -34,10 +34,9 @@ browse the pages:
 with pip3:
  - Flask (1.0.2)
  - SQLAlchemy (1.2.10)
- - google-api-python-client 1.7.9      
- - google-auth (1.5.0) 
- - google-auth-oauthlib (0.2.0)
- - google-auth-httplib2     0.0.3      
+ - Flask-Dance
+ - Flask SQLAlchemy
+ - Flask-Login
 
  
 #### Running and using the webpage
@@ -65,23 +64,13 @@ without logging in a user cannot edit the entries meaning they cannot be modifie
 than the maker of the entry. Every update or addition will only take place after correctly filling
 out the forms, and clicking on the submit button at the bottom of the form.
 
-The login requires a valid Google or Facebook account (with these two I believe nearly 100% of the
+The login requires a valid Facebook account (with these two I believe nearly 100% of the
 users are covered). The status of the user (logged in or out is displayed in the footer on the 
 main page and in the header on the 'inner' pages - the login links are right next to the status
 info.
 
   The pages are intended to be responsive and tested on devices with screen sizes ranging from 
 300px width to 1,500px.
-
-
-#### JSON API endpoints
-
-There are three JSON endpoints for the plays, theatres and performances tables in the database at:
-- localhost:8000/plays/JSON/
-- localhost:8000/theatres/JSON/
-- localhost:8000/play/<play_id>/performance/JSON/
-addresses, where <play_id> is the id of the performance (intially, plays with these ids: 20, 24, 
-26, 29, 32 have performances in the db).
 
 
 #### License
