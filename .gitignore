@@ -1,6 +1,3 @@
-.0/*.*
-.0/Images
-.0/playlist
-.0/DB_fill
 static/sc/*
 __pycache__/*
+.infos/*
