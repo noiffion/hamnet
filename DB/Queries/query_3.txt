@@ -1,8 +1,0 @@
-SELECT theatres.id as id, theatres.theatre_name as theatre_name, 
-       cities.id as city_id, cities.city_name as city_name, 
-       theatres.address as address, theatres.webpage as webpage, 
-       theatres.user_id as user_id
-FROM theatres JOIN cities
-ON theatres.city_id = cities.id
-WHERE (theatres.user_id = {0}) OR (theatres.user_id IS NULL)
-ORDER BY theatres.theatre_name ASC;

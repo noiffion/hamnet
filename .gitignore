@@ -1,3 +1,2 @@
-static/sc/*
 __pycache__/*
-.infos/*
+.ignore/*

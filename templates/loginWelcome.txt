@@ -1,1 +1,0 @@
-<div class="login_box" <h1>Welcome, {0}!</h1> <img src="{1}" style="width: 150px; height: 150px; border-radius: 150px; -webkit-border-radius: 150px; -moz-border-radius: 150px;"> </div>
